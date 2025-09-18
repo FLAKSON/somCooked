@@ -24,7 +24,7 @@ public class UserEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Role role =  Role.USER;
+    private Role role = Role.USER;
 
     @Column(nullable = false)
     private boolean enable = true;
