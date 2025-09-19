@@ -1,15 +1,12 @@
 package org.maksymtiutiunnyk.somcooked.controller;
 
 import org.maksymtiutiunnyk.somcooked.dtos.UserRegistrationDto;
-import org.maksymtiutiunnyk.somcooked.dtos.UserRegistrationResponseDto;
 import org.maksymtiutiunnyk.somcooked.services.UserRegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
-@RestController
+@Controller
 @RequestMapping("/auth")
 public class AuthController {
 
@@ -20,7 +17,16 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public UserRegistrationResponseDto registerUser(@RequestBody UserRegistrationDto user) {
-        return userRegistrationService.register(user);
+    public String registerUser(UserRegistrationDto user) {
+        userRegistrationService.register(user);
+        return "redirect:/auth/login";
+    }
+    @GetMapping("/login")
+    public String loginPage() {
+        return "login";
+    }
+    @GetMapping("/register")
+    public String registerPage() {
+        return "register";
     }
 }

@@ -6,7 +6,6 @@ import org.maksymtiutiunnyk.somcooked.entities.UserEntity;
 import org.maksymtiutiunnyk.somcooked.enums.Role;
 import org.maksymtiutiunnyk.somcooked.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -29,9 +28,10 @@ public class UserRegistrationService {
         UserEntity userEntity = new UserEntity();
         userEntity.setUsername(RegistrationDto.username());
         userEntity.setPassword(passwordEncoder.encode(RegistrationDto.password()));
-        userEntity.setEmail(RegistrationDto.username());
+        userEntity.setEmail(RegistrationDto.email());
         userEntity.setRole(Role.USER);
         userRepository.save(userEntity);
+        System.out.println("User is login");
         return new UserRegistrationResponseDto(userEntity.getId(), userEntity.getUsername(), userEntity.getRole().name());
     }
 }
