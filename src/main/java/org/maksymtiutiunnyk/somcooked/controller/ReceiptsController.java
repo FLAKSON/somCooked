@@ -6,10 +6,7 @@ import org.maksymtiutiunnyk.somcooked.services.ReceiptService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/recipe")
@@ -30,6 +27,18 @@ public class ReceiptsController {
     @PostMapping("/add")
     public String newReceipt(@ModelAttribute("recipe") ReceiptCreationDto recipe) {
         receiptService.addReceipt(recipe);
-        return "redirect:/main/home";
+        return "redirect:/recipe/myReceipt";
+    }
+
+    @GetMapping("/myReceipt")
+    public String myReceipt(Model model) {
+        model.addAttribute("recipes", receiptService.getAllReceiptsForUser());
+        return "receiptPage";
+    }
+
+    @GetMapping("/{id}")
+    public String showMoreAboutReceipt(@PathVariable Long id, Model model) {
+        model.addAttribute("recipe", receiptService.getReceiptById(id));
+        return "recipeDetail";
     }
 }

@@ -6,6 +6,8 @@ import org.maksymtiutiunnyk.somcooked.repositories.ReceiptRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class ReceiptService {
@@ -33,6 +35,19 @@ public class ReceiptService {
         catch (Exception e) {
             System.err.println("Error adding recipe: " + e.getMessage());
         }
+    }
 
+    public ArrayList<ReceiptEntity> getAllReceiptsForUser() {
+        ArrayList<ReceiptEntity> receipts = new ArrayList<>();
+        for (ReceiptEntity receipt : receiptRepository.findAll()) {
+            if (receipt.getUser().getId().equals(userInfoService.getUser().getId())) {
+                receipts.add(receipt);
+            }
+        }
+        return receipts;
+    }
+
+    public ReceiptEntity getReceiptById(Long id) {
+        return receiptRepository.findById(id).orElse(null);
     }
 }

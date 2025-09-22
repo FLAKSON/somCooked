@@ -1,5 +1,6 @@
 package org.maksymtiutiunnyk.somcooked.controller;
 
+import org.maksymtiutiunnyk.somcooked.services.ReceiptService;
 import org.maksymtiutiunnyk.somcooked.services.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,14 +13,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class ContentController {
 
     private final UserInfoService userInfoService;
+    private final ReceiptService receiptService;
     @Autowired
-    public ContentController(UserInfoService userInfoService) {
+    public ContentController(UserInfoService userInfoService, ReceiptService receiptService) {
         this.userInfoService = userInfoService;
+        this.receiptService = receiptService;
     }
 
     @GetMapping("/home")
     public String mainPage(Model model) {
         model.addAttribute("username", userInfoService.getUsername().toUpperCase());
+        model.addAttribute("myRecipes", receiptService.getAllReceiptsForUser());
         return "mainPage";
     }
 }
