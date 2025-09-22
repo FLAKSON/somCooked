@@ -1,7 +1,6 @@
 package org.maksymtiutiunnyk.somcooked.services;
 
 import org.maksymtiutiunnyk.somcooked.dtos.UserRegistrationDto;
-import org.maksymtiutiunnyk.somcooked.dtos.UserRegistrationResponseDto;
 import org.maksymtiutiunnyk.somcooked.entities.UserEntity;
 import org.maksymtiutiunnyk.somcooked.enums.Role;
 import org.maksymtiutiunnyk.somcooked.repositories.UserRepository;
@@ -21,7 +20,7 @@ public class UserRegistrationService {
         this.userRepository = userRepository;
     }
 
-    public UserRegistrationResponseDto register(UserRegistrationDto RegistrationDto) {
+    public void register(UserRegistrationDto RegistrationDto) {
         if (userRepository.findByUsername(RegistrationDto.username()).isPresent()) {
             throw new RuntimeException("Username is already in use");
         }
@@ -31,7 +30,5 @@ public class UserRegistrationService {
         userEntity.setEmail(RegistrationDto.email());
         userEntity.setRole(Role.USER);
         userRepository.save(userEntity);
-        System.out.println("User is login");
-        return new UserRegistrationResponseDto(userEntity.getId(), userEntity.getUsername(), userEntity.getRole().name());
     }
 }

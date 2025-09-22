@@ -3,11 +3,10 @@ package org.maksymtiutiunnyk.somcooked.entities;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.Date;
-
+import java.time.LocalDate;
+@Data
 @Entity
 @Table(name = "receipts")
-@Data
 public class ReceiptEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,12 +25,14 @@ public class ReceiptEntity {
     private String steps;
 
     @Column(nullable = false)
-    private boolean isPublic;
+    private boolean publicFlag = false;
 
     @Column(nullable = false)
-    private Date creationDate;
+    private LocalDate creationDate;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(name = "fk_receipt_user"))
     private UserEntity user;
+
+
 }

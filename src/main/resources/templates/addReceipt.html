@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Recipe - Culinary Journey</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6A5ACD;
+            --primary-light: #9370DB;
+            --secondary: #FF7F50;
+            --accent: #20B2AA;
+            --dark: #2F4F4F;
+            --light: #F5F5F5;
+            --white: #FFFFFF;
+            --gray: #708090;
+            --shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            color: var(--dark);
+            line-height: 1.7;
+            font-size: 16px;
+            min-height: 100vh;
+            padding-bottom: 2rem;
+        }
+
+        .header {
+            background: var(--white);
+            padding: 1.2rem 2rem;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav a {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.7rem 1.2rem;
+            border-radius: 30px;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav a:hover {
+            background: var(--primary);
+            color: var(--white);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(106, 90, 205, 0.3);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .page-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 2.5rem;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .page-title::before, .page-title::after {
+            content: '';
+            flex: 1;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary-light), transparent);
+        }
+
+        .page-title i {
+            color: var(--secondary);
+        }
+
+        .recipe-form {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+            color: var(--dark);
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+        }
+
+        .form-group label i {
+            color: var(--primary);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 1rem 1.2rem;
+            border: 2px solid #e1e5eb;
+            border-radius: 12px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
+            transition: var(--transition);
+            background-color: var(--light);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(106, 90, 205, 0.2);
+            background-color: var(--white);
+        }
+
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        #ingredients {
+            min-height: 200px;
+        }
+
+        #steps {
+            min-height: 300px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--primary);
+        }
+
+        .checkbox-group label {
+            margin-bottom: 0;
+            cursor: pointer;
+        }
+
+        .form-hint {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-hint i {
+            color: var(--accent);
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 2.5rem;
+        }
+
+        .btn {
+            padding: 1rem 2.2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: var(--transition);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            border: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, var(--secondary), var(--accent));
+            color: var(--white);
+            box-shadow: 0 5px 15px rgba(255, 127, 80, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(255, 127, 80, 0.5);
+            background: linear-gradient(90deg, var(--accent), var(--primary-light));
+        }
+
+        .btn-secondary {
+            background: var(--light);
+            color: var(--dark);
+            border: 2px solid #e1e5eb;
+        }
+
+        .btn-secondary:hover {
+            background: #e4e8f0;
+            transform: translateY(-3px);
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 1.2rem;
+                padding: 1.5rem;
+            }
+
+            .nav {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .page-title {
+                font-size: 2.2rem;
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .page-title::before, .page-title::after {
+                flex: none;
+                width: 100px;
+            }
+
+            .recipe-form {
+                padding: 1.8rem;
+            }
+
+            .btn-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        .character-count {
+            text-align: right;
+            font-size: 0.85rem;
+            color: var(--gray);
+            margin-top: 0.3rem;
+        }
+
+        .character-count.limit {
+            color: #ff4757;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+<header class="header">
+    <a th:href="@{/main/home}" class="logo">
+        <i class="fas fa-utensils"></i>Culinary Journey
+    </a>
+    <nav class="nav">
+        <a th:href="@{/}"><i class="fas fa-home"></i>Home</a>
+        <a th:href="@{/profile}"><i class="fas fa-user"></i>Profile</a>
+        <a th:href="@{/logout}"><i class="fas fa-sign-out-alt"></i>Logout</a>
+    </nav>
+</header>
+
+<div class="container">
+    <h1 class="page-title">
+        <i class="fas fa-plus-circle"></i>Add New Recipe
+    </h1>
+
+    <form th:action="@{/recipe/add}" th:object="${recipe}" method="post" class="recipe-form">
+        <div class="form-group">
+            <label for="title"><i class="fas fa-heading"></i>Recipe Title</label>
+            <input type="text" id="title" th:field="*{title}" class="form-control" placeholder="Enter recipe title" required>
+            <div class="form-hint">
+                <i class="fas fa-info-circle"></i>Choose a descriptive and appealing title for your recipe
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="description"><i class="fas fa-align-left"></i>Description</label>
+            <textarea id="description" th:field="*{description}" class="form-control" placeholder="Describe your recipe (optional)"></textarea>
+            <div class="character-count" id="description-count">0/500 characters</div>
+            <div class="form-hint">
+                <i class="fas fa-info-circle"></i>Briefly describe what makes this recipe special
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="ingredients"><i class="fas fa-list-ul"></i>Ingredients</label>
+            <textarea id="ingredients" th:field="*{ingredients}" class="form-control" placeholder="List each ingredient on a new line. Example:&#10;- 2 cups flour&#10;- 1 tsp salt&#10;- 3 large eggs" required></textarea>
+            <div class="character-count" id="ingredients-count">0/2000 characters</div>
+            <div class="form-hint">
+                <i class="fas fa-info-circle"></i>List each ingredient on a separate line with quantities
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="steps"><i class="fas fa-list-ol"></i>Cooking Steps</label>
+            <textarea id="steps" th:field="*{steps}" class="form-control" placeholder="Describe each step in detail. Example:&#10;1. Preheat oven to 350°F (175°C)&#10;2. Mix dry ingredients in a large bowl&#10;3. Add wet ingredients and stir until combined" required></textarea>
+            <div class="character-count" id="steps-count">0/4000 characters</div>
+            <div class="form-hint">
+                <i class="fas fa-info-circle"></i>Number each step and provide clear instructions
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="checkbox-group">
+                <input type="checkbox" id="publicFlag" th:field="*{publicFlag}">
+                <label for="publicFlag">Make this recipe public</label>
+            </div>
+            <div class="form-hint">
+                <i class="fas fa-info-circle"></i>Public recipes are visible to all users, private recipes are only visible to you
+            </div>
+        </div>
+
+        <div class="btn-container">
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save"></i>Save Recipe
+            </button>
+            <a th:href="@{/}" class="btn btn-secondary">
+                <i class="fas fa-times"></i>Cancel
+            </a>
+        </div>
+    </form>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const descriptionTextarea = document.getElementById('description');
+        const ingredientsTextarea = document.getElementById('ingredients');
+        const stepsTextarea = document.getElementById('steps');
+
+        const descriptionCount = document.getElementById('description-count');
+        const ingredientsCount = document.getElementById('ingredients-count');
+        const stepsCount = document.getElementById('steps-count');
+
+        function updateCharacterCount(textarea, counter, maxLength) {
+            const length = textarea.value.length;
+            counter.textContent = `${length}/${maxLength} characters`;
+
+            if (length > maxLength * 0.9) {
+                counter.classList.add('limit');
+            } else {
+                counter.classList.remove('limit');
+            }
+        }
+
+        if (descriptionTextarea) {
+            descriptionTextarea.addEventListener('input', function() {
+                updateCharacterCount(this, descriptionCount, 500);
+            });
+            // Initialize count
+            updateCharacterCount(descriptionTextarea, descriptionCount, 500);
+        }
+
+        if (ingredientsTextarea) {
+            ingredientsTextarea.addEventListener('input', function() {
+                updateCharacterCount(this, ingredientsCount, 2000);
+            });
+            updateCharacterCount(ingredientsTextarea, ingredientsCount, 2000);
+        }
+
+        if (stepsTextarea) {
+            stepsTextarea.addEventListener('input', function() {
+                updateCharacterCount(this, stepsCount, 4000);
+            });
+            updateCharacterCount(stepsTextarea, stepsCount, 4000);
+        }
+    });
+</script>
+</body>
+</html>

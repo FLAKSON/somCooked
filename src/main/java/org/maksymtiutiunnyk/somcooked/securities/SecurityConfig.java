@@ -24,8 +24,10 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
+
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/css/**").permitAll()
                         .requestMatchers("/auth/register").permitAll()
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/main/**").hasAnyRole("USER", "ADMIN")
@@ -34,6 +36,7 @@ public class SecurityConfig {
                 )
                 .formLogin(httpSecurityFormLoginConfigurer -> {
                     httpSecurityFormLoginConfigurer.loginPage("/auth/login").permitAll();
+                    httpSecurityFormLoginConfigurer.defaultSuccessUrl("/main/home");
                 })
                 .authenticationProvider(daoAuthenticationProvider())
                 .build();

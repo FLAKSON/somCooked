@@ -1,10 +1,74 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>Welcome to main page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Culinary Journey</title>
+    <link rel="stylesheet" th:href="@{/css/styleMainPage.css}"/>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
+
 <body>
-    <h1>Welcome to main page</h1>
+<header class="header">
+    <h1 class="welcome-title"><i class="fas fa-utensils"></i>Hello, <span th:text="${username}">User</span>!</h1>
+    <nav class="nav">
+        <a th:href="@{/profile}"><i class="fas fa-book"></i>My Recipes</a>
+        <a th:href="@{/recipe/new}"><i class="fas fa-plus-circle"></i>Add Recipe</a>
+        <a th:href="@{/recipes}"><i class="fas fa-globe"></i>All Recipes</a>
+        <a th:href="@{/logout}"><i class="fas fa-sign-out-alt"></i>Logout</a>
+    </nav>
+</header>
+
+<main class="main">
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1>Discover the Art of Cooking</h1>
+            <p>Explore, create, and share delicious recipes with our vibrant community of food enthusiasts</p>
+            <a th:href="@{/recipe/new}" class="cta-button">Start Cooking <i class="fas fa-arrow-right"></i></a>
+        </div>
+    </section>
+
+    <div class="cards-container">
+        <section class="card">
+            <h2><i class="fas fa-heart"></i>My Recent Recipes</h2>
+            <ul class="recipe-list" th:if="${myRecipes != null and !myRecipes.isEmpty()}">
+                <li class="recipe-item" th:each="recipe : ${myRecipes}">
+                    <a th:href="@{/recipe/{id}(id=${recipe.id})}">
+                        <span><i class="fas fa-arrow-right"></i><span th:text="${recipe.title}">Recipe</span></span>
+                        <i class="fas fa-external-link-alt"></i>
+                    </a>
+                </li>
+            </ul>
+            <div class="empty-state" th:if="${myRecipes == null or myRecipes.isEmpty()}">
+                <i class="fas fa-book-open"></i>
+                <p>You haven't created any recipes yet</p>
+                <a th:href="@{/recipe/new}" class="cta-button">Create Your First Recipe</a>
+            </div>
+        </section>
+
+        <section class="card">
+            <h2><i class="fas fa-users"></i>Latest Community Recipes</h2>
+            <ul class="recipe-list" th:if="${latestRecipes != null and !latestRecipes.isEmpty()}">
+                <li class="recipe-item" th:each="recipe : ${latestRecipes}">
+                    <a th:href="@{/recipe/{id}(id=${recipe.id})}">
+                        <span><i class="fas fa-arrow-right"></i><span th:text="${recipe.title}">Recipe</span></span>
+                        <i class="fas fa-external-link-alt"></i>
+                    </a>
+                </li>
+            </ul>
+            <div class="empty-state" th:if="${latestRecipes == null or latestRecipes.isEmpty()}">
+                <i class="fas fa-chef-hat"></i>
+                <p>Be the first to share a recipe with our community</p>
+                <a th:href="@{/recipe/new}" class="cta-button">Share a Recipe</a>
+            </div>
+        </section>
+    </div>
+</main>
+
+<a th:href="@{/recipe/new}" class="floating-button">
+    <i class="fas fa-plus"></i>
+</a>
 </body>
 </html>
