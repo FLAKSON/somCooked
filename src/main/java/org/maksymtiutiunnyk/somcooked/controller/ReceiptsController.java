@@ -41,4 +41,22 @@ public class ReceiptsController {
         model.addAttribute("recipe", receiptService.getReceiptById(id));
         return "recipeDetail";
     }
+
+    @PostMapping("/delete/{id}")
+    public String deleteReceipt(@PathVariable Long id) {
+        receiptService.deleteReceiptById(id);
+        return "redirect:/recipe/myReceipt";
+    }
+
+    @GetMapping("/edit/{id}")
+    public String showEditForm(@PathVariable Long id, Model model) {
+        ReceiptEntity recipe = receiptService.getReceiptById(id);
+        model.addAttribute("recipe", recipe);
+        return "editRecipe";
+    }
+    @PostMapping("/update/{id}")
+    public String updateReceipt(@PathVariable Long id, @ModelAttribute("recipe") ReceiptCreationDto recipe) {
+        receiptService.editReceipt(id, recipe);
+        return "redirect:/recipe/myReceipt";
+    }
 }

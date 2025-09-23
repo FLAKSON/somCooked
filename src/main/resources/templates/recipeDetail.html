@@ -8,55 +8,86 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        /* --- Общие стили --- */
-        :root {
-            --primary: #6a5acd;
-            --primary-light: #9b85e3;
-            --accent: #ff7f50;
-            --secondary: #ff6347;
-            --gray: #777;
-            --white: #fff;
-            --dark: #333;
-            --shadow: 0 4px 8px rgba(0,0,0,0.1);
-            --transition: 0.3s ease;
-        }
-
-        body {
-            font-family: 'Montserrat', sans-serif;
-            background-color: #f9f9f9;
-            margin: 0;
-            padding: 0;
-        }
-
-        header.header {
+        /* === Контейнер кнопок === */
+        .recipe-actions {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 2rem;
-            background: var(--primary);
-            color: var(--white);
+            gap: 1.5rem;
+            justify-content: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 2px solid rgba(106, 90, 205, 0.1);
+            flex-wrap: wrap;
         }
 
-        .welcome-title span {
-            color: var(--accent);
-        }
-
-        nav.nav a {
-            color: var(--white);
-            text-decoration: none;
-            margin-left: 1.5rem;
+        /* === Красивые кнопки === */
+        .action-btn {
+            padding: 0.9rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.05rem;
+            cursor: pointer;
             display: inline-flex;
             align-items: center;
-            gap: 0.3rem;
+            gap: 0.6rem;
+            transition: all 0.3s ease;
+            color: white;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
         }
 
-        nav.nav a:hover {
-            text-decoration: underline;
+        /* Цветовые варианты */
+        .back-btn {
+            background: linear-gradient(135deg, #6c757d, #495057);
+        }
+        .edit-btn {
+            background: linear-gradient(135deg, #ff7f50, #ff6347);
+        }
+        .delete-btn {
+            background: linear-gradient(135deg, #ff4757, #e84118);
         }
 
-        /* --- Контейнер рецепта --- */
+        /* Эффект свечения при наведении */
+        .action-btn:hover {
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+        }
+
+        /* Лёгкая анимация иконок */
+        .action-btn i {
+            font-size: 1.1rem;
+            transition: transform 0.3s ease;
+        }
+        .action-btn:hover i {
+            transform: rotate(-12deg) scale(1.2);
+        }
+
+        /* === Таблица ингредиентов шире === */
+        .recipe-content {
+            display: grid;
+            grid-template-columns: 3fr 3fr; /* равные, но обе шире */
+            gap: 2rem;
+            align-items: start;
+            margin-bottom: 3rem;
+        }
+
+        .ingredients-list li {
+            display: grid;
+            grid-template-columns: 2.5fr 1fr; /* название шире, количество уже */
+            gap: 1rem;
+            padding: 0.8rem 1rem;
+            border-bottom: 1px solid #f0f0f0;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            transition: background 0.3s ease;
+        }
+        .ingredients-list li:hover {
+            background: linear-gradient(90deg, rgba(106, 90, 205, 0.08), rgba(255, 127, 80, 0.08));
+        }
+        /* ==== Локальные стили только для страницы рецепта ==== */
         .recipe-detail-container {
-            max-width: 900px;
+            max-width: 1200px;
             margin: 2rem auto;
             padding: 0 1.5rem;
         }
@@ -85,26 +116,9 @@
             flex-wrap: wrap;
         }
 
-        .meta-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .recipe-status {
-            background: var(--accent);
-            color: white;
-            padding: 0.3rem 1rem;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
         .recipe-image {
             width: 100%;
-            max-height: 400px;
+            height: 300px;
             object-fit: cover;
             border-radius: 15px;
             margin-bottom: 2rem;
@@ -116,31 +130,44 @@
             font-size: 4rem;
         }
 
-        .recipe-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-            margin-bottom: 3rem;
-        }
-
-        @media (max-width: 768px) {
-            .recipe-content {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-            }
-        }
-
-        .content-section, .description-section {
+        .description-section {
             background: var(--white);
             padding: 2rem;
             border-radius: 15px;
             box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .recipe-content {
+            display: grid;
+            grid-template-columns: 2.5fr 3fr; /* ингредиенты шире */
+            gap: 2rem;
+            align-items: start;
+            margin-bottom: 3rem;
+        }
+
+        .content-section {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            min-height: 300px;
+            border-left: 6px solid;
+            border-image: linear-gradient(to bottom, var(--primary), var(--accent)) 1;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .content-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(106, 90, 205, 0.2);
         }
 
         .section-title {
             font-family: 'Playfair Display', serif;
             font-size: 1.5rem;
-            color: var(--primary);
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             margin-bottom: 1.5rem;
             padding-bottom: 0.5rem;
             border-bottom: 2px solid rgba(106, 90, 205, 0.2);
@@ -149,62 +176,49 @@
             gap: 0.7rem;
         }
 
-        .ingredients-list, .steps-list {
-            list-style: none;
+        /* === Ингредиенты как таблица === */
+        .ingredients-list {
+            width: 100%;
             padding: 0;
+            margin: 0;
+            list-style: none;
         }
 
-        .ingredient-item {
-            padding: 0.8rem 0;
+        .ingredients-list li {
+            display: grid;
+            grid-template-columns: 2fr 1fr; /* название / количество */
+            gap: 1rem;
+            padding: 0.8rem 1rem;
             border-bottom: 1px solid #f0f0f0;
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
+            border-radius: 6px;
+            font-size: 1.05rem;
+            transition: background 0.3s ease;
         }
 
-        .ingredient-item:last-child {
+        .ingredients-list li:hover {
+            background: linear-gradient(90deg, rgba(106, 90, 205, 0.08), rgba(255, 127, 80, 0.08));
+        }
+
+        .ingredients-list li:last-child {
             border-bottom: none;
         }
 
-        .ingredient-item::before {
-            content: "•";
-            color: var(--secondary);
-            font-size: 1.5rem;
-        }
-
-        .step-item {
-            padding: 1.2rem 0 1.2rem 1rem;
-            border-left: 3px solid var(--accent);
-            margin-bottom: 1rem;
-            position: relative;
-            counter-increment: step-counter;
-        }
-
+        /* === Шаги === */
         .steps-list {
-            counter-reset: step-counter;
+            list-style: decimal inside;
+            padding-left: 1rem;
         }
 
-        .step-item::before {
-            content: counter(step-counter);
-            background: var(--primary);
-            color: white;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: absolute;
-            left: -15px;
-            top: 1rem;
-            font-size: 0.9rem;
-            font-weight: bold;
+        .steps-list li {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+            border-radius: 6px;
+            padding: 0.6rem;
+            transition: background 0.3s ease;
         }
 
-        .description-text {
-            line-height: 1.8;
-            color: var(--dark);
-            font-size: 1.1rem;
+        .steps-list li:hover {
+            background: linear-gradient(90deg, rgba(255, 127, 80, 0.1), rgba(106, 90, 205, 0.1));
         }
 
         .recipe-actions {
@@ -216,33 +230,11 @@
             border-top: 2px solid rgba(106, 90, 205, 0.1);
         }
 
-        .action-btn {
-            padding: 0.8rem 1.5rem;
-            border: none;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            cursor: pointer;
-        }
-
-        .back-btn { background: var(--gray); color: var(--white); }
-        .edit-btn { background: var(--accent); color: var(--white); }
-        .delete-btn { background: #ff4757; color: var(--white); }
-
-        .action-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        @media (max-width: 600px) {
-            .recipe-title { font-size: 2.2rem; }
-            .recipe-meta { flex-direction: column; gap: 0.5rem; }
-            .recipe-actions { flex-direction: column; align-items: center; }
-            .action-btn { width: 200px; justify-content: center; }
+        /* === Мобильная версия === */
+        @media (max-width: 768px) {
+            .recipe-content {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -253,12 +245,11 @@
         <a th:href="@{/main/home}"><i class="fas fa-home"></i> Home</a>
         <a th:href="@{/recipes}"><i class="fas fa-globe"></i>All Recipes</a>
         <a th:href="@{/recipe/new}"><i class="fas fa-plus"></i> Create Recipe</a>
-        <a th:href="@{/auth/logout}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        <a th:href="@{/logout}"><i class="fas fa-sign-out-alt"></i> Logout</a>
     </nav>
 </header>
 
 <main class="recipe-detail-container">
-    <!-- Recipe Header -->
     <section class="recipe-header">
         <h1 class="recipe-title" th:text="${recipe.title}">Recipe Title</h1>
 
@@ -271,10 +262,6 @@
                 <i class="fas fa-calendar"></i>
                 <span th:text="${recipe.creationDate}">Creation Date</span>
             </div>
-            <div class="meta-item">
-                <i class="fas fa-clock"></i>
-                <span th:text="${#strings.arraySplit(recipe.steps, '\n').length} + ' steps'">0 steps</span>
-            </div>
         </div>
 
         <div class="recipe-status">
@@ -283,39 +270,37 @@
         </div>
     </section>
 
-    <!-- Recipe Image -->
     <div class="recipe-image">
         <i class="fas fa-utensils"></i>
     </div>
 
-    <!-- Description -->
     <section class="description-section" th:if="${recipe.description != null && !recipe.description.isEmpty()}">
         <h2 class="section-title"><i class="fas fa-file-alt"></i> Description</h2>
         <p class="description-text" th:text="${recipe.description}">Recipe description...</p>
     </section>
 
-    <!-- Ingredients & Steps -->
     <div class="recipe-content">
+        <!-- Ингредиенты -->
         <section class="content-section">
             <h2 class="section-title"><i class="fas fa-list"></i> Ingredients</h2>
             <ul class="ingredients-list">
                 <li th:each="ingredient : ${#strings.arraySplit(recipe.ingredients, '\n')}"
-                    th:if="${!ingredient.isEmpty()}" class="ingredient-item"
-                    th:text="${ingredient}">Ingredient</li>
+                    th:if="${!ingredient.isEmpty()}"
+                    th:text="${ingredient}">Ingredient - 250g</li>
             </ul>
         </section>
 
+        <!-- Шаги -->
         <section class="content-section">
             <h2 class="section-title"><i class="fas fa-list-ol"></i> Cooking Steps</h2>
-            <ol class="steps-list">
+            <ul class="steps-list">
                 <li th:each="step : ${#strings.arraySplit(recipe.steps, '\n')}"
-                    th:if="${!step.isEmpty()}" class="step-item"
+                    th:if="${!step.isEmpty()}"
                     th:text="${step}">Step description...</li>
-            </ol>
+            </ul>
         </section>
     </div>
 
-    <!-- Actions -->
     <div class="recipe-actions">
         <a th:href="@{/recipe/myReceipt}" class="action-btn back-btn"><i class="fas fa-arrow-left"></i> Back to Recipes</a>
         <a th:href="@{'/recipe/edit/' + ${recipe.id}}" class="action-btn edit-btn"><i class="fas fa-edit"></i> Edit Recipe</a>

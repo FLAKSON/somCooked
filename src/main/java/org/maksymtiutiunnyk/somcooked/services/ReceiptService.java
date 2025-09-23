@@ -50,4 +50,18 @@ public class ReceiptService {
     public ReceiptEntity getReceiptById(Long id) {
         return receiptRepository.findById(id).orElse(null);
     }
+
+    public void deleteReceiptById(Long id) {
+        receiptRepository.deleteById(id);
+    }
+
+    public void editReceipt(Long id, ReceiptCreationDto receipt) {
+        ReceiptEntity receiptForEdit = getReceiptById(id);
+        receiptForEdit.setDescription(receipt.description());
+        receiptForEdit.setIngredients(receipt.ingredients());
+        receiptForEdit.setSteps(receipt.steps());
+        receiptForEdit.setPublicFlag(receipt.publicFlag());
+        receiptForEdit.setTitle(receipt.title());
+        receiptRepository.save(receiptForEdit);
+    }
 }
