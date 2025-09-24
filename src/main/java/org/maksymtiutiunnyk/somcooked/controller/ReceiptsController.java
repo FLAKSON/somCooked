@@ -59,4 +59,9 @@ public class ReceiptsController {
         receiptService.editReceipt(id, recipe);
         return "redirect:/recipe/myReceipt";
     }
+    @GetMapping("/all")
+    public String getAllReceipts(Model model) {
+        model.addAttribute("recipes", receiptService.getAllReceipts());
+        return "allRecipes";
+    }
 }

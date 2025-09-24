@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Recipes - Culinary Journey</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* Твой CSS */
+        :root {
+            --primary: #6A5ACD;
+            --primary-light: #9370DB;
+            --secondary: #FF7F50;
+            --accent: #20B2AA;
+            --dark: #2F4F4F;
+            --light: #F5F5F5;
+            --white: #FFFFFF;
+            --gray: #708090;
+            --shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            color: var(--dark);
+            line-height: 1.7;
+            font-size: 16px;
+            overflow-x: hidden;
+        }
+
+        .header {
+            background: var(--white);
+            padding: 1.2rem 2rem;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav a {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.7rem 1.2rem;
+            border-radius: 30px;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav a:hover {
+            background: var(--primary);
+            color: var(--white);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(106, 90, 205, 0.3);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2.5rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .page-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 2.5rem;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .recipes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        .recipe-card {
+            background: var(--white);
+            border-radius: 18px;
+            padding: 1.8rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .recipe-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .recipe-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.6rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .recipe-meta {
+            font-size: 0.95rem;
+            color: var(--gray);
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .recipe-meta i { color: var(--secondary); }
+
+        .recipe-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: auto;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 0.8rem 1.2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: var(--transition);
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, var(--secondary), var(--accent));
+            color: var(--white);
+            box-shadow: 0 5px 15px rgba(255, 127, 80, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(255, 127, 80, 0.5);
+        }
+
+        .btn-secondary {
+            background: var(--light);
+            color: var(--dark);
+            border: 2px solid #e1e5eb;
+        }
+
+        .btn-secondary:hover {
+            background: #e4e8f0;
+            transform: translateY(-3px);
+        }
+    </style>
+</head>
+<body>
+<header class="header">
+    <a th:href="@{/main/home}" class="logo">
+        <i class="fas fa-utensils"></i>Culinary Journey
+    </a>
+    <nav class="nav">
+        <a th:href="@{/main/home}"><i class="fas fa-home"></i>Home</a>
+        <a th:href="@{/logout}"><i class="fas fa-sign-out-alt"></i>Logout</a>
+    </nav>
+</header>
+
+<div class="container">
+    <h1 class="page-title">
+        <i class="fas fa-globe"></i> All Public Recipes
+    </h1>
+
+    <div class="recipes-grid">
+        <div th:each="recipe : ${recipes}" class="recipe-card">
+            <h2 class="recipe-title">
+                <i class="fas fa-book-open"></i>
+                <span th:text="${recipe.title}">Recipe Title</span>
+            </h2>
+            <div class="recipe-meta">
+                <span><i class="fas fa-user"></i> <span th:text="${recipe.user.username}">Author</span></span>
+                <span><i class="fas fa-calendar-alt"></i> <span th:text="${recipe.creationDate}">2025-09-24</span></span>
+            </div>
+
+            <div class="recipe-actions">
+                <a th:href="@{'/recipe/' + ${recipe.id}}" class="btn btn-primary">
+                    <i class="fas fa-eye"></i> View
+                </a>
+
+                <a th:if="${recipe.user != null and recipe.user.username == #authentication.principal.username}"
+                   th:href="@{'/recipe/edit/' + ${recipe.id}}" class="btn btn-secondary">
+                    <i class="fas fa-edit"></i> Edit
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

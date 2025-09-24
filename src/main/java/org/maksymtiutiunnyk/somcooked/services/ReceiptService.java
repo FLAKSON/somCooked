@@ -3,6 +3,7 @@ package org.maksymtiutiunnyk.somcooked.services;
 import org.maksymtiutiunnyk.somcooked.dtos.ReceiptCreationDto;
 import org.maksymtiutiunnyk.somcooked.entities.ReceiptEntity;
 import org.maksymtiutiunnyk.somcooked.repositories.ReceiptRepository;
+import org.maksymtiutiunnyk.somcooked.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -14,10 +15,12 @@ public class ReceiptService {
 
     private final ReceiptRepository receiptRepository;
     private final UserInfoService userInfoService;
+    private final UserRepository userRepository;
 
-    public ReceiptService(ReceiptRepository receiptRepository, UserInfoService userInfoService) {
+    public ReceiptService(ReceiptRepository receiptRepository, UserInfoService userInfoService, UserRepository userRepository) {
         this.receiptRepository = receiptRepository;
         this.userInfoService = userInfoService;
+        this.userRepository = userRepository;
     }
 
     public void addReceipt(ReceiptCreationDto receipt) {
@@ -63,5 +66,15 @@ public class ReceiptService {
         receiptForEdit.setPublicFlag(receipt.publicFlag());
         receiptForEdit.setTitle(receipt.title());
         receiptRepository.save(receiptForEdit);
+    }
+
+    public ArrayList<ReceiptEntity> getAllReceipts() {
+        ArrayList<ReceiptEntity> receipts = new ArrayList<>();
+        for (ReceiptEntity receipt : receiptRepository.findAll()) {
+            if (receipt.isPublicFlag()) {
+                receipts.add(receipt);
+            }
+        }
+        return receipts;
     }
 }
