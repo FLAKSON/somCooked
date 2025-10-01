@@ -29,7 +29,7 @@ A simple web application where users can create, save, and share cooking recipes
 ![Main Screen](https://i.ibb.co/WNK5T7rq/image.png)
 
 ### Recipe View
-![Recipe View](https://i.ibb.co/KxVm61r0/image.png)
+![Recipe View](https://i.ibb.co/jZTQZwmR/image.png)
 
 ---
 
