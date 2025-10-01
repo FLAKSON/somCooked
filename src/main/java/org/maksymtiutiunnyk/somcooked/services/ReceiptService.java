@@ -2,6 +2,7 @@ package org.maksymtiutiunnyk.somcooked.services;
 
 import org.maksymtiutiunnyk.somcooked.dtos.ReceiptCreationDto;
 import org.maksymtiutiunnyk.somcooked.entities.ReceiptEntity;
+import org.maksymtiutiunnyk.somcooked.entities.UserEntity;
 import org.maksymtiutiunnyk.somcooked.repositories.ReceiptRepository;
 import org.maksymtiutiunnyk.somcooked.repositories.UserRepository;
 import org.springframework.stereotype.Service;
@@ -55,11 +56,17 @@ public class ReceiptService {
     }
 
     public void deleteReceiptById(Long id) {
+        if (receiptRepository.getById(id).getUser().getId() != userInfoService.getUser().getId()) {
+            return;
+        }
         receiptRepository.deleteById(id);
     }
 
     public void editReceipt(Long id, ReceiptCreationDto receipt) {
         ReceiptEntity receiptForEdit = getReceiptById(id);
+        if (receiptForEdit.getUser().getId() != userInfoService.getUser().getId()) {
+            return;
+        }
         receiptForEdit.setDescription(receipt.description());
         receiptForEdit.setIngredients(receipt.ingredients());
         receiptForEdit.setSteps(receipt.steps());

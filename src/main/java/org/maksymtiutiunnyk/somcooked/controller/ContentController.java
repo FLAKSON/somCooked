@@ -24,6 +24,7 @@ public class ContentController {
     public String mainPage(Model model) {
         model.addAttribute("username", userInfoService.getUsername().toUpperCase());
         model.addAttribute("myRecipes", receiptService.getAllReceiptsForUser());
+        model.addAttribute("latestRecipes", receiptService.getAllReceipts());
         return "mainPage";
     }
 }
